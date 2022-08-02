@@ -115,6 +115,7 @@ export default function Search() {
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [filteredList, setFilteredList] = useState('');
 
+  // Search call to Github API
   async function searchCode(e) {
     let userInput = e.target.value;
     const response = await API.get('/search/repositories', {
@@ -143,11 +144,6 @@ export default function Search() {
           // console.log(search);
         } else setMsg(`Search failed.`);
       })
-      // .then((r) => {
-      //   if (r.items.length > 1) {
-      //     setMsg(r.items[0].id);
-      //   }
-      // })
       .catch(function (error) {
         if (error.response.status === 403) {
           setMsg('Search limit exceeded. Please try again later.');
@@ -160,6 +156,7 @@ export default function Search() {
       });
   }
 
+  //Log user search input
   function searchInput(e) {
     let userInput = e.target.value;
     setSearch(userInput);
@@ -168,6 +165,7 @@ export default function Search() {
     setShowAutocomplete(true);
   }
 
+  //Timer to run search API call 0.5sec after user stopped typing
   function run(e) {
     clearTimeout(timer);
     const runner = setTimeout(function () {
@@ -176,17 +174,20 @@ export default function Search() {
     setTimer(runner);
   }
 
+  //Run multiple functions on input change
   function mulFunction(e) {
     searchInput(e);
     run(e);
   }
 
+  //Autofill input field upon click on selected autocomplete text
   function select(e) {
     setSearch(e.target.innerText);
     setShowAutocomplete(false);
     setMsg('');
   }
 
+  //Show autocomplete field upon input
   function show() {
     return (
       <ul className="suggestion">
