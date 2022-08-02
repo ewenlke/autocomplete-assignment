@@ -4,108 +4,25 @@ import { useEffect, useState } from 'react';
 export default function Search() {
   const defaultState = [
     {
+      login: '',
       id: '',
-      node_id: '',
-      name: '',
-      full_name: '',
-      owner: {
-        login: '',
-        id: '',
-        node_id: '',
-        avatar_url: '',
-        gravatar_id: '',
-        url: '',
-        received_events_url: '',
-        type: '',
-        html_url: '',
-        followers_url: '',
-        following_url: '',
-        gists_url: '',
-        starred_url: '',
-        subscriptions_url: '',
-        organizations_url: '',
-        repos_url: '',
-        events_url: '',
-        site_admin: '',
-      },
-      private: '',
-      html_url: '',
-      description: '',
-      fork: '',
+      node_id: '=',
+      avatar_url: '',
+      gravatar_id: '',
       url: '',
-      created_at: '',
-      updated_at: '',
-      pushed_at: '',
-      homepage: '',
-      size: '',
-      stargazers_count: '',
-      watchers_count: '',
-      language: '',
-      forks_count: '',
-      open_issues_count: '',
-      master_branch: '',
-      default_branch: '',
+      html_url: '',
+      followers_url: '',
+      subscriptions_url: '',
+      organizations_url: '',
+      repos_url: '',
+      received_events_url: 's',
+      type: '',
       score: '',
-      archive_url: '',
-      assignees_url: '}',
-      blobs_url: '',
-      branches_url: '}',
-      collaborators_url: '',
-      comments_url: '',
-      commits_url: '',
-      compare_url: '',
-      contents_url: '',
-      contributors_url: '',
-      deployments_url: '',
-      downloads_url: '',
+      following_url: '',
+      gists_url: '',
+      starred_url: '',
       events_url: '',
-      forks_url: '',
-      git_commits_url: '',
-      git_refs_url: '',
-      git_tags_url: '',
-      git_url: '',
-      issue_comment_url: '',
-      issue_events_url: '',
-      issues_url: '',
-      keys_url: '',
-      labels_url: '',
-      languages_url: '',
-      merges_url: '',
-      milestones_url: '',
-      notifications_url: '',
-      pulls_url: '',
-      releases_url: '',
-      ssh_url: '',
-      stargazers_url: '',
-      statuses_url: '',
-      subscribers_url: '',
-      subscription_url: '',
-      tags_url: '',
-      teams_url: '',
-      trees_url: '',
-      clone_url: '',
-      mirror_url: '',
-      hooks_url: '',
-      svn_url: '',
-      forks: '',
-      open_issues: '',
-      watchers: '',
-      has_issues: '',
-      has_projects: '',
-      has_pages: '',
-      has_wiki: '',
-      has_downloads: '',
-      archived: '',
-      disabled: '',
-      visibility: '',
-      license: {
-        key: '',
-        name: '',
-        url: '',
-        spdx_id: '',
-        node_id: '',
-        html_url: '',
-      },
+      site_admin: '',
     },
   ];
   const [search, setSearch] = useState('');
@@ -118,7 +35,7 @@ export default function Search() {
   // Search call to Github API
   async function searchCode(e) {
     let userInput = e.target.value;
-    const response = await API.get('/search/repositories', {
+    const response = await API.get('/search/users', {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -128,17 +45,17 @@ export default function Search() {
     })
       .then((res) => {
         if (res.status === 200 && userInput) {
-          console.log(userInput);
+          // console.log(userInput);
           let filtered = [];
           let list = res.data.items;
           let data = list.map((r) => {
-            return `${r.description}`;
+            return `${r.login}`;
           });
-          if (userInput.length > 0) {
-            filtered = data.filter((item) => item.toLowerCase().indexOf(userInput.toLowerCase()));
-            console.log(filtered);
-          }
-          setFilteredList(filtered);
+          // if (userInput.length > 0) {
+          //   filtered = data.filter((item) => item.toLowerCase().indexOf(userInput.toLowerCase()));
+          //   console.log(data);
+          // }
+          setFilteredList(data);
           setList(list);
           setMsg('Search suggested');
           // console.log(search);
@@ -205,7 +122,7 @@ export default function Search() {
     <>
       <div>
         <form>
-          <h2 className="header-text">Github repository search</h2>
+          <h2 className="header-text">Github users search</h2>
           <h3 className="message-text">{msg}</h3>
           <input type="text" placeholder="Start query" className="search" onChange={mulFunction} value={search} />
           {showAutocomplete && search ? show() : null}
