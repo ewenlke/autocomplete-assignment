@@ -1,55 +1,81 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+* {
+  margin: 0;
+  padding: 0;
 }
 
 body {
+  display: flex;
+  justify-content: center;
+  text-align: center;
   font-family: 'Roboto', Arial, sans-serif;
   font-weight: 300;
   font-size: 14px;
   box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  text-align: center;
   background-color: grey;
   color: #ffffff;
   padding: 50px;
 }
 
 .header-text {
-  height: 2vmin;
+  height: 3vmin;
+}
+
+.message-text {
+  height: 3vmin;
+  padding: 10px;
+}
+
+.search {
+  border-radius: 5px;
+  width: 340px;
+  padding: 10px;
+  border: none;
+  background-color: white;
+  outline: none;
+  color: black;
+}
+
+.suggestion {
+  border: 1px solid black;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 10px;
+  list-style: none;
+  margin-top: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-left: 0;
+  width: 350px;
+  z-index: 1;
+  text-align: left;
+  background-color: white;
+  color: black;
+  transform: translate(0.2rem, 0rem);
+}
+
+.suggestion li {
+  padding: 0.5rem;
+}
+
+.suggestion-active,
+.suggestion li:hover {
+  background-color: grey;
+  opacity: 80%;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.suggestion::-webkit-scrollbar {
+  width: 7px;
+}
+
+.suggestion::-webkit-scrollbar-track {
+  background-color: black;
+  border-radius: 30px;
+  margin-block: 1em;
+}
+
+.suggestion::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 5px;
 }

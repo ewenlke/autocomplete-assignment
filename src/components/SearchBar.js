@@ -1,8 +1,7 @@
 import API from './GetAPI';
 import { useEffect, useState } from 'react';
-import './SearchBar.css';
 
-export default function Search(props) {
+export default function Search() {
   const defaultState = [
     {
       id: '',
@@ -116,30 +115,32 @@ export default function Search(props) {
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [filteredList, setFilteredList] = useState('');
 
-  async function searchCode() {
-    const RESPONSE = await API.get('/search/repositories', {
+  async function searchCode(e) {
+    let userInput = e.target.value;
+    const response = await API.get('/search/repositories', {
       headers: {
         'Content-Type': 'application/json',
       },
       params: {
-        q: `${search}`,
+        q: `${userInput}`,
       },
     })
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 && userInput) {
+          console.log(userInput);
           let filtered = [];
           let list = res.data.items;
           let data = list.map((r) => {
             return `${r.description}`;
           });
-          if (search.length > 0) {
-            filtered = data.filter((item) => item.toLowerCase().indexOf(search.toLowerCase()));
+          if (userInput.length > 0) {
+            filtered = data.filter((item) => item.toLowerCase().indexOf(userInput.toLowerCase()));
             console.log(filtered);
           }
           setFilteredList(filtered);
           setList(list);
           setMsg('Search suggested');
-          return res.data;
+          // console.log(search);
         } else setMsg(`Search failed.`);
       })
       // .then((r) => {
@@ -148,7 +149,12 @@ export default function Search(props) {
       //   }
       // })
       .catch(function (error) {
-        if (error.message) {
+        if (error.response.status === 403) {
+          setMsg('Search limit exceeded. Please try again later.');
+          setFilteredList('');
+        } else if (error.response.status === 422) {
+          setMsg('');
+        } else if (error.message) {
           setMsg(`Error: ${error.message}`);
         }
       });
@@ -162,21 +168,17 @@ export default function Search(props) {
     setShowAutocomplete(true);
   }
 
-  function run() {
+  function run(e) {
     clearTimeout(timer);
-    const runner = setTimeout(searchCode, 500);
-    // const suggestion = setTimeout(filterSuggestion, 2000);
+    const runner = setTimeout(function () {
+      searchCode(e);
+    }, 500);
     setTimer(runner);
   }
 
   function mulFunction(e) {
     searchInput(e);
-    run();
-  }
-
-  function test(e) {
-    e.preventDefault();
-    console.log(filteredList);
+    run(e);
   }
 
   function select(e) {
@@ -200,10 +202,11 @@ export default function Search(props) {
 
   return (
     <>
-      <div className="search">
-        <form onSubmit={test}>
-          <h3 className="header-text">{msg}</h3>
-          <input type="text" placeholder="Start query" className="search-one" onChange={mulFunction} value={search} autoComplete="off" />
+      <div>
+        <form>
+          <h2 className="header-text">Github repository search</h2>
+          <h3 className="message-text">{msg}</h3>
+          <input type="text" placeholder="Start query" className="search" onChange={mulFunction} value={search} />
           {showAutocomplete && search ? show() : null}
         </form>
       </div>
