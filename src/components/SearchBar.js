@@ -46,7 +46,7 @@ export default function Search() {
       .then((res) => {
         if (res.status === 200 && userInput) {
           // console.log(userInput);
-          let filtered = [];
+          // let filtered = [];
           let list = res.data.items;
           let data = list.map((r) => {
             return `${r.login}`;
@@ -57,6 +57,7 @@ export default function Search() {
           // }
           setFilteredList(data);
           setList(list);
+          setShowAutocomplete(true);
           setMsg('Search suggested');
           // console.log(search);
         } else setMsg(`Search failed.`);
@@ -79,7 +80,6 @@ export default function Search() {
     setSearch(userInput);
     setMsg('');
     // console.log(search);
-    setShowAutocomplete(true);
   }
 
   //Timer to run search API call 0.5sec after user stopped typing
