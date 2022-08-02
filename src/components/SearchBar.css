@@ -1,0 +1,54 @@
+.search-one {
+  border-radius: 5px;
+  width: 340px;
+  padding: 10px;
+  border: none;
+  background-color: white;
+  outline: none;
+  color: black;
+}
+
+.suggestion {
+  border: 1px solid black;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 10px;
+  list-style: none;
+  margin-top: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-left: 0;
+  width: 350px;
+  z-index: 1;
+  text-align: left;
+  background-color: white;
+  color: black;
+  transform: translate(0.2rem, 0rem);
+}
+
+.suggestion li {
+  padding: 0.5rem;
+}
+
+.suggestion-active,
+.suggestion li:hover {
+  background-color: grey;
+  opacity: 80%;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.suggestion::-webkit-scrollbar {
+  width: 7px;
+}
+
+.suggestion::-webkit-scrollbar-track {
+  background-color: black;
+  border-radius: 30px;
+  margin-block: 1em;
+}
+
+.suggestion::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 5px;
+}
