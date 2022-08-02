@@ -3,46 +3,60 @@ import { useState } from 'react';
 
 export default function Search(props) {
   const [search, setSearch] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [msg, setMsg] = useState('');
+  const [list, setList] = useState('');
+  const [timer, setTimer] = useState(null);
 
-  async function SearchCode(r) {
-    r.preventDefault();
-    const RESPONSE = await API.get('/search/code', {
+  async function SearchCode() {
+    const RESPONSE = await API.get('/search/repositories', {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + process.env.GH_TOKEN,
       },
       params: {
-        // q: `${query}`,
-        q: 'test',
+        q: `${search}`,
       },
-    }).catch(function (error) {
-      if (error.message) {
-        setErrorMsg(`error.message: ${error.message}`);
-      }
-    });
-
-    if (RESPONSE.status === 200) {
-      let data = RESPONSE.data;
-      if (data.Services.length > 0) {
-        props.fetchData({ data });
-        setErrorMsg('Success');
-      } else {
-        setErrorMsg(`Search failed.`);
-      }
-    }
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setList(res.data);
+          return res.data;
+        }
+      })
+      .then((r) => {
+        console.log(r);
+        if (r.items.length > 0) {
+          setMsg(r.items[0].id);
+        } else setMsg(`Search failed.`);
+      })
+      .catch(function (error) {
+        if (error.message) {
+          setMsg(`Error: ${error.message}`);
+        }
+      });
   }
 
   function searchInput(e) {
     setSearch(e.target.value);
+    console.log(search);
+  }
+
+  function run() {
+    clearTimeout(timer);
+    const runner = setTimeout(SearchCode, 1000);
+    setTimer(runner);
+  }
+
+  function mulFunction(e) {
+    searchInput(e);
+    run();
   }
 
   return (
     <>
       <div className="search">
         <form onSubmit={SearchCode}>
-          <input type="text" placeholder="Start query" onChange={searchInput} />
-          <h3 className="error-msg">{errorMsg}</h3>
+          <input type="text" placeholder="Start query" onChange={mulFunction} />
+          <h3 className="error-msg">{msg}</h3>
         </form>
       </div>
     </>
